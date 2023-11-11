@@ -1,0 +1,13 @@
+Primeiros passos com Django.
+
+
+Criar app-
+python manage.py startapp lojasvarejistasapp
+
+---- 
+Depois de criar os apps
+
+- Necessário cadastrar os apps no Settings no INSTALLED_APPS = []
+- Dentro dos templates inserir as pastas que os arquivos irao buscá-los: 'DIRS': ['templates'],
+- Criar modelos do banco de dados
+- Criar os recursos para visualizar no terminal Admin.
