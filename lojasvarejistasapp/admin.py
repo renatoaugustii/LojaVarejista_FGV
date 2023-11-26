@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import tab_cliente, tab_dependente, tab_loja, tab_produto, tab_pedido, tab_item, tab_fornecedor
+from .models import tab_cliente, tab_dependente, tab_loja, tab_produto, tab_pedido, tab_item, tab_fornecedor, tab_inventario
 
 class ListViewCliente(admin.ModelAdmin):
     list_display=('nomeCliente', 'cpf', 'telefone')
@@ -12,3 +12,4 @@ admin.site.register(tab_loja)
 admin.site.register(tab_produto)
 admin.site.register(tab_fornecedor)
 admin.site.register(tab_item)
+admin.site.register(tab_inventario)

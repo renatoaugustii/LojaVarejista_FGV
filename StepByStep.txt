@@ -11,3 +11,6 @@ Depois de criar os apps
 - Dentro dos templates inserir as pastas que os arquivos irao buscá-los: 'DIRS': ['templates'],
 - Criar modelos do banco de dados
 - Criar os recursos para visualizar no terminal Admin.
+-  Para usar console(Terminal de python para consultas de banco de dados): python manage.py shell
+- Criar campos na tabela pelo shell: tableName.objects.create(xx)
+- Exemplo de consultas tab_pedido.objects.get(id=1).cliente.cpf 
