@@ -44,8 +44,6 @@
 .card-body i {
             font-size: 50px; /* Ajusta o tamanho do ícone */
             margin-bottom: 10px; /* Adiciona espaçamento abaixo do ícone */
-
-
         }
 
     </style>
@@ -66,70 +64,78 @@
                 <li class="nav-item"><a href="#" class="nav-link text-secondary">Requisitos</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-secondary">Sobre <i class="bi bi-info-square ms-1"></i></a></li>
               </ul>
-              
             </header>
             <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                  <li class="breadcrumb-item active"><a href="#"><i class="bi bi-house-door-fill text-secondary me-2"></i></a>Home</li>
+                  <li class="breadcrumb-item"><a href="#"><i class="bi bi-house-door-fill text-secondary"></i></a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Clientes</li>
                 </ol>
               </nav>
-              <hr class="border-secondary ">
           </div>
           <div class="main">
-        <div class="row">
-            <div class="col-4">
-                <div class="card h-100  bg-info text-white">
-                    <div class="card-body">
-                        <p>Cadastrar Cliente</p>
-                        <i class="bi bi-person-add"></i>
-                    </div>
+            <h5 class="mb-4 mt-4 text-secondary">Cadastro de Cliente</h5>
+            <form action="." method="post" class="row g-3">
+
+                <div class="col-md-4">
+                  <label for="inputnome" class="form-label"><small>Nome</small></label>
+                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Nome Completo">
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="card h-100  bg-info text-white">
-                    <a href="">
-                        <div class="card-body ">
-                            <p>Cadastrar Dependente</p>
-                            <i class="bi bi-people"></i>
-                        </div>
-                    </a>
+
+                <div class="col-md-4">
+                  <label for="inputemail" class="form-label"><small>CPF</small></label>
+                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Somente números">
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="card h-100  bg-info text-white">
-                    <div class="card-body ">
-                        <p>Cadastrar Produto</p>
-                        <i class="bi bi-box"></i>
-                    </div>
+
+                <div class="col-md-4">
+                  <label for="inputtelefone" class="form-label"><small>Telefone</small></label>
+                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Somente números">
                 </div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col-4">
-                <div class="card h-100  bg-info text-white">
-                    <div class="card-body ">
-                        <p>Cadastrar Fornecedor</p>
-                        <i class="bi bi-truck"></i>
-                    </div>
+
+                <div class="col-md-6">
+                  <label for="inputtipopessoa" class="form-label"><small>Endereço</small></label>
+                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Endereço completo">
+              </div>
+            
+                <div class="col-md-6 align-items d-flex justify-content-end align-items-end">
+                  <button type="button" class="btn btn-outline-danger">Sair</button>
+                  <button type="submit" class="btn btn-success ms-2">Salvar</button>
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="card h-100  bg-info text-white">
-                    <div class="card-body ">
-                        <p>Cadastrar Loja</p>
-                        <i class="bi bi-shop"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="card h-100 bg-primary text-white">
-                    <div class="card-body ">
-                        <p>Vender</p>
-                        <i class="bi bi-bag"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+              </form><!-- End No Labels Form -->
+              <hr class="border-secondary">
+              <h5 class="mb-4 mt-4 text-secondary">Dependente cadastrados</h5>
+              <table class="table table-hover shadow">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">CPF</th>
+                    <th scope="col">Telefone</th>
+                    <th scope="col">Endereço</th>
+                    <th scope="col">Programa Pts</th>
+                    <th scope="col">Total Pts</th>
+                    <th scope="col">Editar</th>
+                    <th scope="col">Excluir</th>
+                  </tr>
+                  <tbody>
+                    <tr> <!-- Inserir variáveis do Django Aqui -->
+                      <td> 1 </td>
+                      <td> Renato Augusto </td>
+                      <td> 11122233345 </td>
+                      <td> 3133344567</td>
+                      <td> Rua de Lugar nenhum 244 </td>
+                      <td> Sim </td>
+                      <td> 123 </td>
+                      <td> <a href=""> <i class="bi bi-pencil text-dark"></i></a> </td>
+                      <td> <a href=""> <i class="bi bi-trash text-danger"></i></a> </td>
+                    </tr>
+                  </tbody>
+                </thead>
+                <tr>
+
+                </tr>
+
+              </table>
           </div>
 
         <footer class="py-3 my-4">
