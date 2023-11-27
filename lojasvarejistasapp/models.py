@@ -1,9 +1,5 @@
 from django.db import models
 
-# Making Queries
-# https://docs.djangoproject.com/en/3.2/topics/db/queries/#retrieving-objects
-
-
 class tab_cliente(models.Model):
     nomeCliente = models.CharField(max_length=60, blank=True, null=True)
     cpf = models.CharField(max_length=20, blank=True, null=True,unique=True)
@@ -66,13 +62,12 @@ class tab_pedido(models.Model):
     tipoVenda = models.CharField(max_length=1, choices = choice_tipo_venda, blank=False, null=True)
     totalPedido = models.FloatField(default=0.0, blank=False, null=False)
     # ForeingKey Below
-    cliente = models.ForeignKey(tab_cliente, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(tab_cliente,blank=True, null=True, on_delete=models.CASCADE)
     dependente = models.ForeignKey(tab_dependente, default= 0 ,blank=True, null=True ,on_delete=models.CASCADE)
     
 class tab_item(models.Model):
     quantidade = models.IntegerField(blank=False, null=False)
-    precoUnitario = models.FloatField(default=0.0, blank=False, null=False)
     subTotal = models.FloatField(default=0.0, blank=False, null=False)
     # ForeingKey Below
-    produto = models.ForeignKey(tab_produto, on_delete=models.CASCADE)
+    produto = models.ForeignKey(tab_inventario, on_delete=models.CASCADE)
     pedido = models.ForeignKey(tab_pedido, on_delete=models.CASCADE)

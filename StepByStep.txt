@@ -14,3 +14,4 @@ Depois de criar os apps
 -  Para usar console(Terminal de python para consultas de banco de dados): python manage.py shell
 - Criar campos na tabela pelo shell: tableName.objects.create(xx)
 - Exemplo de consultas tab_pedido.objects.get(id=1).cliente.cpf 
+- Falar sobre o modo de editar, criar instancia do objeto e depois mandar salvar.

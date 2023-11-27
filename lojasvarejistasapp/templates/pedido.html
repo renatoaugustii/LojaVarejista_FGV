@@ -1,37 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FGV Atividade Final</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+{% extends 'bases/base.html' %}
+{% load static %}
 
-</head>
-<body>
-    
+{%block 'head'%}
+<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{%url 'home'%}"><i class="bi bi-house-door-fill text-secondary"></i></a></li>
+    <li class="breadcrumb-item active" aria-current="page">Pedido</li>
+  </ol>
+</nav>
+{%endblock 'head'%}
 
-    <div class="container">
-        <div class="container">
-            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-              <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                <i class="bi bi-upc-scan fs-2 me-4"></i>
-                <span class="fs-4">Atividade Final -  FGV</span>
-              </a>
-        
-              <ul class="nav nav-pills">
-                <!--<li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>-->
-                <li class="nav-item"><a href="#" class="nav-link text-secondary">Requisitos</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-secondary">Sobre <i class="bi bi-info-square ms-1"></i></a></li>
-              </ul>
-            </header>
-            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#"><i class="bi bi-house-door-fill text-secondary"></i></a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Pedidos</li>
-                </ol>
-              </nav>
-          </div>
+{%block 'main'%}
           <div class="main">
             <h5 class="mb-4 mt-4 text-secondary">Criar Pedido</h5>
             <div class="row">
@@ -254,17 +233,4 @@
 
               </table>
           </div>
-
-        <footer class="py-3 my-4">
-            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-              <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
-              <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Requisitos</a></li>
-              <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Sobre</a></li>
-            </ul>
-            <p class="text-center text-body-secondary">© 2023 Renato Augusto - FGV</p>
-          </footer>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-
-</body>
-</html>
+{%endblock 'main'%}

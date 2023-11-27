@@ -1,111 +1,64 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FGV Atividade Final</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-    <style>
-        body{
-            background-color: #f2f2f2;
-        }
+{% extends 'bases/base.html' %}
+{% load static %}
 
- .card {
+{%block 'head'%}
+<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{%url 'home'%}"><i class="bi bi-house-door-fill text-secondary"></i></a></li>
+    <li class="breadcrumb-item active" aria-current="page">Clientes</li>
+  </ol>
+</nav>
+{%endblock 'head'%}
 
-            display: flex; /* Ativa o modelo flexbox */
-            justify-content: center; /* Centraliza horizontalmente */
-            align-items: center; /* Centraliza verticalmente */
-            transition: transform 0.2s ease-in-out;
-            border: none;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-.card:hover {
-            transform: scale(1.05);
-        }
-
-
-.card-body{
-    text-align: center;
-}
-.card-body p {
-            font-size: 1.5rem;
-    font-weight: bold;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-.card a {
-            text-decoration: none; /* Remove o sublinhado dos links */
-            color: inherit; /* Mantém a cor padrão do texto do link */
-        }
-
-.card-body i {
-            font-size: 50px; /* Ajusta o tamanho do ícone */
-            margin-bottom: 10px; /* Adiciona espaçamento abaixo do ícone */
-        }
-
-    </style>
-</head>
-<body>
-    
-
-    <div class="container">
-        <div class="container">
-            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-              <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                <i class="bi bi-upc-scan fs-2 me-4"></i>
-                <span class="fs-4">Atividade Final -  FGV</span>
-              </a>
-        
-              <ul class="nav nav-pills">
-                <!--<li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>-->
-                <li class="nav-item"><a href="#" class="nav-link text-secondary">Requisitos</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-secondary">Sobre <i class="bi bi-info-square ms-1"></i></a></li>
-              </ul>
-            </header>
-            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#"><i class="bi bi-house-door-fill text-secondary"></i></a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Clientes</li>
-                </ol>
-              </nav>
-          </div>
+{%block 'main'%}
           <div class="main">
             <h5 class="mb-4 mt-4 text-secondary">Cadastro de Cliente</h5>
-            <form action="." method="post" class="row g-3">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
+            <form method="POST" action="{% if cliente.id %}{% url 'editar_cliente' cliente.id %}{% else %}{% url 'cadastrar_cliente' %}{% endif %}" class="row g-3">
+              {% csrf_token %}
                 <div class="col-md-4">
                   <label for="inputnome" class="form-label"><small>Nome</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Nome Completo">
+                  <input type="text" name= "nome" class="form-control"  value="{{cliente.nomeCliente}}" placeholder="Nome Completo">
                 </div>
 
                 <div class="col-md-4">
                   <label for="inputemail" class="form-label"><small>CPF</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Somente números">
+                  <input type="text" name= "cpf" class="form-control" value="{{cliente.cpf}}"  placeholder="Somente números">
                 </div>
 
                 <div class="col-md-4">
                   <label for="inputtelefone" class="form-label"><small>Telefone</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Somente números">
+                  <input type="text" name= "telefone" class="form-control" value="{{cliente.telefone}}"  placeholder="Somente números">
                 </div>
 
                 <div class="col-md-6">
                   <label for="inputtipopessoa" class="form-label"><small>Endereço</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Endereço completo">
+                  <input type="text" name= "endereco" class="form-control" value="{{cliente.endereco}}"  placeholder="Endereço completo">
               </div>
             
                 <div class="col-md-6 align-items d-flex justify-content-end align-items-end">
-                  <button type="button" class="btn btn-outline-danger">Sair</button>
-                  <button type="submit" class="btn btn-success ms-2">Salvar</button>
+                  <a href="{% url 'home' %}" class="btn btn-outline-danger">Sair</a>
+                {% if cliente.id %}
+                  <button type="submit" class="btn btn-success ms-2">Alterar</button>
+                {% else %}
+                  <button type="submit" class="btn btn-success ms-3">Salvar</button>
+                {% endif %}
+
                 </div>
 
-              </form><!-- End No Labels Form -->
+            </form><!-- End No Labels Form -->
               <hr class="border-secondary">
-              <h5 class="mb-4 mt-4 text-secondary">Dependente cadastrados</h5>
-              <table class="table table-hover shadow">
-                <thead>
+              <h5 class="mb-4 mt-4 text-secondary">Clientes cadastrados</h5>
+              <div class="shadow" style="max-height: 280px; overflow-y: auto;">
+              <table class="table table-hover" >
+                <thead style="position: sticky; top: 0; background-color: white;">
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Cliente</th>
@@ -117,37 +70,29 @@
                     <th scope="col">Editar</th>
                     <th scope="col">Excluir</th>
                   </tr>
+                  
                   <tbody>
+                    {% for cliente in clientes %}
                     <tr> <!-- Inserir variáveis do Django Aqui -->
-                      <td> 1 </td>
-                      <td> Renato Augusto </td>
-                      <td> 11122233345 </td>
-                      <td> 3133344567</td>
-                      <td> Rua de Lugar nenhum 244 </td>
-                      <td> Sim </td>
-                      <td> 123 </td>
-                      <td> <a href=""> <i class="bi bi-pencil text-dark"></i></a> </td>
-                      <td> <a href=""> <i class="bi bi-trash text-danger"></i></a> </td>
+                      <td> {{cliente.id}} </td>
+                      <td> {{cliente.nomeCliente}} </td>
+                      <td> {{cliente.cpf}} </td>
+                      <td> {{cliente.telefone}}</td>
+                      <td> {{cliente.endereco}}</td>
+                      <td> {% if cliente.programaPTS %}Sim {%else%} Não {%endif%}</td>
+                      <td> {{cliente.totalPontos}} </td>
+                      <td> <a href="{% url 'editar_cliente' cliente.id %}">  <i class="bi bi-pencil text-dark"></i></a> </td>
+                      <td> <a href="{% url 'excluir_cliente' cliente.id %}"> <i class="bi bi-trash text-danger"></i></a> </td>
                     </tr>
+                    {% endfor %}
                   </tbody>
+
                 </thead>
                 <tr>
 
                 </tr>
 
               </table>
+            </div>
           </div>
-
-        <footer class="py-3 my-4">
-            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-              <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
-              <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Requisitos</a></li>
-              <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Sobre</a></li>
-            </ul>
-            <p class="text-center text-body-secondary">© 2023 Renato Augusto - FGV</p>
-          </footer>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-
-</body>
-</html>
+{%endblock 'main'%}
