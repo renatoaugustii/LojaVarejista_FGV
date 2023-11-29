@@ -14,22 +14,29 @@
 
           <div class="main">
             <h5 class="mb-4 mt-4 text-secondary">Cadastro de Dependente</h5>
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             <hr class="border-secondary">
-            <form action="." method="post" class="row g-3">
-
+            <form method="POST" action="{% if dependente.id %}{% url 'editar_dependente' dependente.id %}{% else %}{% url 'cadastrar_dependente' %}{% endif %}" class="row g-3">
+              {% csrf_token %}
                 <div class="col-md-4">
                   <label for="inputnome" class="form-label"><small>Nome</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                  <input type="text" name="nome" class="form-control" value="{{dependente.nomeDependente}}"  placeholder="">
                 </div>
 
                 <div class="col-md-2">
                   <label for="inputnome" class="form-label"><small>Parentesco</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                  <input type="text" name="parentesco" class="form-control" value="{{dependente.parentesco}}"  placeholder="">
                 </div>
 
                 <div class="col-md-4">
-                  <label for="Cliente" class="form-label"><small>Cliente</small></label>
-                  <select name="Cliente" id="Cliente" class="form-select">
+                  <label for="cliente" class="form-label"><small>Cliente</small></label>
+                  <select name="cliente" id="cliente" class="form-select">
                       <option value="">Selecione o Cliente</option>
                       {% for cliente in clientes %}
                           <option value="{{ cliente.id }}">{{ cliente.nomeCliente }}</option>
@@ -40,8 +47,13 @@
 
             
                 <div class="col-md-2 align-items d-flex justify-content-end align-items-end">
-                  <button type="button" class="btn btn-outline-danger">Sair</button>
-                  <button type="submit" class="btn btn-success ms-2">Salvar</button>
+                  <a href="{% url 'home' %}" class="btn btn-outline-danger">Sair</a>
+                {% if dependente.id %}
+                  <button type="submit" class="btn btn-success ms-2">Alterar</button>
+                {% else %}
+                  <button type="submit" class="btn btn-success ms-3">Salvar</button>
+                {% endif %}
+
                 </div>
 
               </form><!-- End No Labels Form -->
@@ -60,13 +72,13 @@
                   </tr>
                   <tbody>
                     {% for dependente in dependentes %}
-                    <tr> <!-- Inserir variáveis do Django Aqui -->
+                    <tr> 
                       <td> {{dependente.id}} </td>
                       <td> {{dependente.nomeDependente}} </td>
                       <td> {{dependente.Cliente}} </td>
                       <td> {{dependente.parentesco}} </td>
-                      <td> <a href=""> <i class="bi bi-pencil text-dark"></i></a> </td>
-                      <td> <a href=""> <i class="bi bi-trash text-danger"></i></a> </td>
+                      <td> <a href="{% url 'editar_dependente' dependente.id %}">  <i class="bi bi-pencil text-dark"></i></a> </td>
+                      <td> <a href="{% url 'excluir_dependente' dependente.id %}"> <i class="bi bi-trash text-danger"></i></a> </td>
                     </tr>
                     {% endfor %}
                   </tbody>

@@ -13,6 +13,7 @@
 {%block 'main'%}
           <div class="main">
             <h5 class="mb-4 mt-4 text-secondary">Cadastro de Cliente</h5>
+            
             {% if messages %}
                 {% for message in messages %}
                 <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}">
@@ -50,7 +51,6 @@
                 {% else %}
                   <button type="submit" class="btn btn-success ms-3">Salvar</button>
                 {% endif %}
-
                 </div>
 
             </form><!-- End No Labels Form -->

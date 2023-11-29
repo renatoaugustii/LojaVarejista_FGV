@@ -13,38 +13,49 @@
 {%block 'main'%}
           <div class="main">
             <h5 class="mb-4 mt-4 text-secondary">Cadastro de Loja</h5>
-            <form action="." method="post" class="row g-3">
-
+              {% if messages %}
+                  {% for message in messages %}
+                  <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}">
+                          {{ message }}
+                      </div>
+                  {% endfor %}
+              {% endif %}
+              <form method="POST" action="{% if loja.id %}{% url 'editar_loja' loja.id %}{% else %}{% url 'cadastrar_loja' %}{% endif %}" class="row g-3">
+                {% csrf_token %}
                 <div class="col-md-4">
                   <label for="inputnome" class="form-label"><small>Nome da Loja</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Nome Completo">
+                  <input type="text" name="nome" class="form-control"value="{{loja.xxx}}" placeholder="Nome loja">
                 </div>
 
                 <div class="col-md-8">
                   <label for="inputemail" class="form-label"><small>Endereço</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Endereço completo">
+                  <input type="text" name="endereco" class="form-control"value="{{loja.xxx}}" placeholder="Endereço completo">
                 </div>
                 <hr>
                 <h6 class="text-secondary">Horários de Funcionamento</h6>
                 <div class="col-md-3">
                   <label for="inputtelefone" class="form-label"><small>Segunda a Sexta</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="00:00 - 00:00">
+                  <input type="text" name="seg_sex" class="form-control"value="{{loja.xxx}}" placeholder="00:00 - 00:00">
                 </div>
 
                 <div class="col-md-3">
                   <label for="inputtipopessoa" class="form-label"><small>Sábado</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="00:00 - 00:00">
+                  <input type="text" name="sab" class="form-control"value="{{loja.xxx}}" placeholder="00:00 - 00:00">
               </div>
 
               <div class="col-md-3">
                 <label for="inputtipopessoa" class="form-label"><small>Domingo</small></label>
-                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="00:00 - 00:00">
+                <input type="text" name="dom" class="form-control"value="{{loja.xxx}}" placeholder="00:00 - 00:00">
             </div>
             
-                <div class="col-md-3 align-items d-flex justify-content-end align-items-end">
-                  <button type="button" class="btn btn-outline-danger">Sair</button>
-                  <button type="submit" class="btn btn-success ms-2">Salvar</button>
-                </div>
+            <div class="col-md-3 align-items d-flex justify-content-end align-items-end">
+              <a href="{% url 'home' %}" class="btn btn-outline-danger">Sair</a>
+                  {% if loja.id %}
+                    <button type="submit" class="btn btn-success ms-2">Alterar</button>
+                  {% else %}
+                    <button type="submit" class="btn btn-success ms-3">Salvar</button>
+                  {% endif %}
+            </div>
 
               </form><!-- End No Labels Form -->
               <hr class="border-secondary">
@@ -62,16 +73,18 @@
                     <th scope="col">Excluir</th>
                   </tr>
                   <tbody>
-                    <tr> <!-- Inserir variáveis do Django Aqui -->
-                      <td> 1 </td>
-                      <td> Loja Metropolitana </td>
-                      <td> Rua avai 456, galpão 6 </td>
-                      <td> 09:00 - 18:00</td>
-                      <td> 09:00 - 12:00</td>
-                      <td> Fechado </td>
-                      <td> <a href=""> <i class="bi bi-pencil text-dark"></i></a> </td>
-                      <td> <a href=""> <i class="bi bi-trash text-danger"></i></a> </td>
-                    </tr>
+                    {% for loja in lojas %}
+                      <tr> <!-- Inserir variáveis do Django Aqui -->
+                        <td> {{loja.id}}</td>
+                        <td> {{loja.nomeLoja}}</td>
+                        <td> {{loja.endereco}}</td>
+                        <td> {{loja.seg_sex}}</td>
+                        <td> {{loja.sab}}</td>
+                        <td> {{loja.dom}}</td>
+                        <td> <a href="{% url 'editar_loja' loja.id %}">  <i class="bi bi-pencil text-dark"></i></a> </td>
+                        <td> <a href="{% url 'excluir_loja' loja.id %}"> <i class="bi bi-trash text-danger"></i></a> </td>
+                      </tr>
+                    {% endfor %}
                   </tbody>
                 </thead>
                 <tr>

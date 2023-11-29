@@ -19,11 +19,11 @@ class tab_dependente(models.Model):
         return self.nomeDependente
 
 class tab_loja(models.Model):
-    nomeLoja = models.CharField(max_length=60, blank=False)
+    nomeLoja = models.CharField(max_length=60, unique= True ,blank=False)
     endereco = models.CharField(max_length=60, blank=False)
-    seg_sex = models.CharField(max_length=60, blank=False)
-    sab = models.CharField(max_length=60, blank=False)
-    dom = models.CharField(max_length=60, blank=False)
+    seg_sex = models.CharField(max_length=60, blank=True)
+    sab = models.CharField(max_length=60, blank=True)
+    dom = models.CharField(max_length=60, blank=True)
     def __str__(self):    
         return self.nomeLoja
 
