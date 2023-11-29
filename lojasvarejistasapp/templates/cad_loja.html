@@ -24,28 +24,28 @@
                 {% csrf_token %}
                 <div class="col-md-4">
                   <label for="inputnome" class="form-label"><small>Nome da Loja</small></label>
-                  <input type="text" name="nome" class="form-control"value="{{loja.xxx}}" placeholder="Nome loja">
+                  <input type="text" name="nome" class="form-control"value="{{loja.nomeLoja}}" >
                 </div>
 
                 <div class="col-md-8">
                   <label for="inputemail" class="form-label"><small>Endereço</small></label>
-                  <input type="text" name="endereco" class="form-control"value="{{loja.xxx}}" placeholder="Endereço completo">
+                  <input type="text" name="endereco" class="form-control"value="{{loja.endereco}}" >
                 </div>
                 <hr>
                 <h6 class="text-secondary">Horários de Funcionamento</h6>
                 <div class="col-md-3">
                   <label for="inputtelefone" class="form-label"><small>Segunda a Sexta</small></label>
-                  <input type="text" name="seg_sex" class="form-control"value="{{loja.xxx}}" placeholder="00:00 - 00:00">
+                  <input type="text" name="seg_sex" class="form-control"value="{{loja.seg_sex}}" >
                 </div>
 
                 <div class="col-md-3">
                   <label for="inputtipopessoa" class="form-label"><small>Sábado</small></label>
-                  <input type="text" name="sab" class="form-control"value="{{loja.xxx}}" placeholder="00:00 - 00:00">
+                  <input type="text" name="sab" class="form-control"value="{{loja.sab}}" >
               </div>
 
               <div class="col-md-3">
                 <label for="inputtipopessoa" class="form-label"><small>Domingo</small></label>
-                <input type="text" name="dom" class="form-control"value="{{loja.xxx}}" placeholder="00:00 - 00:00">
+                <input type="text" name="dom" class="form-control"value="{{loja.dom}}" >
             </div>
             
             <div class="col-md-3 align-items d-flex justify-content-end align-items-end">

@@ -15,3 +15,6 @@ Depois de criar os apps
 - Criar campos na tabela pelo shell: tableName.objects.create(xx)
 - Exemplo de consultas tab_pedido.objects.get(id=1).cliente.cpf 
 - Falar sobre o modo de editar, criar instancia do objeto e depois mandar salvar.
+
+
+continuar pelo produto. Ainda nao salva. apenas exclui e mostra na tela

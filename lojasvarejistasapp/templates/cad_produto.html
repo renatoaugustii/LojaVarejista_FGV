@@ -14,56 +14,79 @@
 {%block 'main'%}
           <div class="main">
             <h5 class="mb-4 mt-4 text-secondary">Cadastro de Produto</h5>
-            <form action="." method="post" class="row g-3">
-
+              {% if messages %}
+                  {% for message in messages %}
+                  <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}">
+                          {{ message }}
+                      </div>
+                  {% endfor %}
+              {% endif %}
+              <form method="POST" action="{% if produto.id %}{% url 'editar_produto' produto.id %}{% else %}{% url 'cadastrar_produto' %}{% endif %}" class="row g-3">
+                {% csrf_token %}
                 <div class="col-md-3">
                   <label for="inputnome" class="form-label"><small>Nome Produto</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Nome Completo do Produto">
+                  <input  name="nome" class="form-control"  placeholder="">
                 </div>
 
                 <div class="col-md-3">
                   <label for="inputemail" class="form-label"><small>Descrição</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Descrição do Produto">
+                  <input  name="descricao" class="form-control"  placeholder="">
                 </div>
 
                 <div class="col-md-3">
                   <label for="inputtelefone" class="form-label"><small>Marca</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                  <input  name="marca" class="form-control"  placeholder="">
                 </div>
 
                 <div class="col-md-3">
                   <label for="inputtipopessoa" class="form-label"><small>Código Barras</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Somente números">
+                  <input  name="codBarras" class="form-control"  placeholder="Somente números">
               </div>
               <div class="col-md-2">
                 <label for="inputtipopessoa" class="form-label"><small>Tamanho</small></label>
-                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                <input  name="tamanho" class="form-control"  placeholder="">
                 </div>
                 <div class="col-md-2">
                     <label for="inputtipopessoa" class="form-label"><small>Empacotamento</small></label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                    <input  name="mEmpacotamento" class="form-control"  placeholder="">
                 </div>
 
                 <div class="col-md-2">
                     <label for="inputtipopessoa" class="form-label"><small>Estoque Padrão</small></label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                    <input  name="estoquepdr" class="form-control"  placeholder="">
                 </div>
                 <div class="col-md-2">
                   <label for="inputtipopessoa" class="form-label"><small>Preço</small></label>
-                  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                  <input  name="preco" class="form-control"  placeholder="">
                   </div>
-                  <div class="col-md-2">
-                      <label for="inputtipopessoa" class="form-label"><small>Loja</small></label>
-                      <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
-                  </div>
-                  <div class="col-md-2">
-                    <label for="inputtipopessoa" class="form-label"><small>Fornecedor</small></label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+
+                <div class="col-md-2">
+                  <label for="loja" class="form-label"><small>loja</small></label>
+                  <select name="loja" id="loja" class="form-select">
+                      <option value="">Selecione o loja</option>
+                      {% for loja in lojas %}
+                          <option value="{{ loja.id }}">{{ loja.nomeLoja }}</option>
+                      {% endfor %}
+                  </select>
+                </div>
+
+                <div class="col-md-2">
+                  <label for="fornecedor" class="form-label"><small>fornecedor</small></label>
+                  <select name="fornecedor" id="fornecedor" class="form-select">
+                      <option value="">Selecione o fornecedor</option>
+                      {% for fornecedor in fornecedores %}
+                          <option value="{{ fornecedor.id }}">{{ fornecedor.nomeFornecedor }}</option>
+                      {% endfor %}
+                  </select>
                 </div>
 
                 <div class="col-md-12 align-items d-flex justify-content-end align-items-end">
-                  <button type="button" class="btn btn-outline-danger">Sair</button>
-                  <button type="submit" class="btn btn-success ms-2">Salvar</button>
+                  <a href="{% url 'home' %}" class="btn btn-outline-danger">Sair</a>
+                      {% if produto.id %}
+                        <button type="submit" class="btn btn-success ms-2">Alterar</button>
+                      {% else %}
+                        <button type="submit" class="btn btn-success ms-3">Salvar</button>
+                      {% endif %}
                 </div>
 
               </form><!-- End No Labels Form -->
@@ -89,20 +112,22 @@
                   </tr>
                   <tbody>
                     <tr> <!-- Inserir variáveis do Django Aqui -->
-                      <td> 1 </td>
-                      <td> REF001</td>
-                      <td> Refrigerante Coca-Cola</td>
-                      <td> Coca-Cola</td>
-                      <td> 111222333 </td>
-                      <td> 300ml </td>
-                      <td> unid </td>
-                      <td> Coca-Cola</td>
-                      <td> Loja001</td>
-                      <td> 50</td>
-                      <td> 25</td>
-                      <td> R$ 3,99</td>
-                      <td> <a href=""> <i class="bi bi-pencil text-dark"></i></a> </td>
-                      <td> <a href=""> <i class="bi bi-trash text-danger"></i></a> </td>
+                      {% for produto in produtos %}
+                        <td> {{produto.id}} </td>
+                        <td> {{produto.produto}}</td>
+                        <td> {{produto.descricao}}</td>
+                        <td> {{produto.marca}}</td>
+                        <td> {{produto.codBarras}} </td>
+                        <td> {{produto.tamanho}} </td>
+                        <td> {{produto.mEmpacotamento}} </td>
+                        <td> {{produto.fornecedores}}</td>
+                        <td> {{produto.loja}}</td>
+                        <td> {{produto.estoquePadrao}}</td>
+                        <td> {{produto.qtdEstoque}}</td>
+                        <td> {{produto.preco}}</td>
+                        <td> <a href="{% url 'editar_produto' produto.id %}">  <i class="bi bi-pencil text-dark"></i></a> </td>
+                        <td> <a href="{% url 'excluir_produto' produto.id %}"> <i class="bi bi-trash text-danger"></i></a> </td>
+                      {% endfor %}
                     </tr>
                   </tbody>
                 </thead>

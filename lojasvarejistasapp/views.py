@@ -161,15 +161,109 @@ def editar_dependente(request, dependente_id):
 #                 PRODUTOS
 ##############################################
 def produto(request):
-    return render(request, 'cad_produto.html')
+    produtos = tab_produto.objects.all()
+    lojas = tab_loja.objects.all()
+    fornecedores = tab_fornecedor.objects.all()
+    context = {'produtos':produtos, 'lojas':lojas, 'fornecedores':fornecedores}
+    return render(request, 'cad_produto.html', context)
 
+
+
+
+def cadastrar_produto(request):
+    produtos = tab_produto.objects.all()
+    lojas = tab_loja.objects.all()
+    fornecedores = tab_fornecedor.objects.all()
+    context = {'produtos':produtos, 'lojas':lojas, 'fornecedores':fornecedores}
+    return render(request, 'cad_produto.html', context)
+
+def editar_produto(request):
+    produtos = tab_produto.objects.all()
+    lojas = tab_loja.objects.all()
+    fornecedores = tab_fornecedor.objects.all()
+    context = {'produtos':produtos, 'lojas':lojas, 'fornecedores':fornecedores}
+    return render(request, 'cad_produto.html', context)
+
+def excluir_produto(request,produto_id):
+    produto = tab_produto.objects.get(id=produto_id)
+    try:
+        produto.delete()
+        messages.success(request, 'produto excluido com sucesso!')
+    except Exception as e:
+        messages.error(request, f'{e}')        
+    #Busca todos os produtos do banco de dados já cadastrados.
+    produtos = tab_produto.objects.all()
+    lojas = tab_loja.objects.all()
+    fornecedores = tab_fornecedor.objects.all()
+    context = {'produtos':produtos, 'lojas':lojas, 'fornecedores':fornecedores}
+    return render(request, 'cad_produto.html', context)
 
 ##############################################
 #                FORNECEDOR
 ##############################################
 def fornecedor(request):
-    return render(request, 'cad_fornecedor.html')
+    fornecedores = tab_fornecedor.objects.all()
+    context = {'fornecedores':fornecedores}
+    return render(request, 'cad_fornecedor.html', context)
 
+def cadastrar_fornecedor(request):
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        endereco = request.POST.get('endereco') 
+
+        # Criando uma instância do modelo tab_fornecedor com os dados recebidos
+        novo_fornecedor = tab_fornecedor(
+            nomeFornecedor=nome,
+            endereco=endereco,
+        )
+        try:
+            novo_fornecedor.save()
+            messages.success(request, 'fornecedor cadastrado com sucesso!')
+        except Exception as e:
+            messages.error(request, f'{e}')
+
+    fornecedores = tab_fornecedor.objects.all()
+    context = {'fornecedores':fornecedores}
+    return render(request, 'cad_fornecedor.html', context)
+
+def editar_fornecedor(request, fornecedor_id):
+    fornecedor = get_object_or_404(tab_fornecedor, id=fornecedor_id)
+    fornecedores = tab_fornecedor.objects.all()
+
+    if request.method == 'POST':
+        try:
+                nome = request.POST.get('nome')
+                endereco= request.POST.get('endereco')
+
+                fornecedor = get_object_or_404(tab_fornecedor, pk=fornecedor_id)
+
+                fornecedor.nomeFornecedor = nome
+                fornecedor.endereco= endereco
+
+                fornecedor.save()
+                messages.success(request, 'fornecedor editado com sucesso!')
+                # Recarregando fornecedor após salvar as mudanças
+                fornecedor = get_object_or_404(tab_fornecedor, id=fornecedor_id)
+                return redirect('fornecedor')  # Redirecionar para a página correta após a edição
+        except Exception as e:
+            messages.error(request, f'{e}')  
+    
+    fornecedors =  tab_fornecedor.objects.all()   
+    context = {'fornecedor': fornecedor, 'fornecedores': fornecedores, 'fornecedors':fornecedors}
+    return render(request, 'cad_fornecedor.html', context=context)
+
+def excluir_fornecedor(request, fornecedor_id):
+    fornecedor = tab_fornecedor.objects.get(id=fornecedor_id)
+    try:
+        fornecedor.delete()
+        messages.success(request, 'Excluido com sucesso!')
+    except Exception as e:
+        messages.error(request, f'{e}')  
+
+    fornecedores = tab_fornecedor.objects.all()
+    clientes = tab_cliente.objects.all()
+    context = {'fornecedores':fornecedores, 'clientes':clientes}
+    return render(request, 'cad_fornecedor.html', context=context)
 
 ##############################################
 #                  LOJA
@@ -206,12 +300,36 @@ def cadastrar_loja(request):
 
     return render(request, 'cad_loja.html', context)
 
-def excluir_loja(request):
+def excluir_loja(request, loja_id):
+
+    loja = tab_loja.objects.get(id=loja_id)
+    try:
+        loja.delete()
+        messages.success(request, 'loja excluido com sucesso!')
+    except Exception as e:
+        messages.error(request, f'{e}')        
+    #Busca todos os lojas do banco de dados já cadastrados.
     lojas = tab_loja.objects.all()
     context = {'lojas':lojas}
     return render(request, 'cad_loja.html', context)
 
-def editar_loja(request):
+def editar_loja(request, loja_id):
+
+    loja = get_object_or_404(tab_loja, id=loja_id)
     lojas = tab_loja.objects.all()
-    context = {'lojas':lojas}
+
+    if request.method == 'POST':
+        loja.nomeLoja = request.POST.get('nome')
+        loja.endereco = request.POST.get('endereco')
+        loja.seg_sex = request.POST.get('seg_sex')
+        loja.sab = request.POST.get('sab')
+        loja.dom = request.POST.get('dom')
+        # Atualize os outros campos conforme necessário
+
+        loja.save()  # Salva as alterações no banco de dados
+
+        context = {'lojas': lojas, 'loja': loja}
+        return redirect('loja')  # Redirecionar para a página correta após a edição
+
+    context = {'lojas': lojas, 'loja': loja}
     return render(request, 'cad_loja.html', context)
