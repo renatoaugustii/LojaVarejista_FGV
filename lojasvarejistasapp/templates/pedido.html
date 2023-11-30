@@ -69,10 +69,10 @@
 
                         <div class="col-md-3">
                             <label for="produto" class="form-label"><small>Produto</small></label>
-                            <select class="form-select" id="produto" name="produto">
+                            <select class="form-select" id="inventario" name="inventario">
                                 <option value="">Selecione o produto</option>
-                                {% for produto in produtos %}
-                                    <option value="{{ produto.id }}">{{ produto.nomeProduto }}</option>
+                                {% for item in inventario %}
+                                    <option value="{{ item.id }}">{{ item.produto.nomeProduto }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -101,7 +101,6 @@
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Cliente</th>
-                    <th scope="col">Loja</th>
                     <th scope="col">Data</th>
                     <th scope="col">Tipo Venda</th>
                     <th scope="col">Total Pedido</th>
@@ -113,11 +112,16 @@
 
                       <td> {{pedido.id}} </td>
                       <td> {{pedido.cliente}} </td>
-                      <td> {{pedido.loja}} </td>
                       <td> {{pedido.data}} </td>
-                      <td> {{pedido.tipoVenda}} </td>
+                      <td>  {% if pedido.tipoVenda == 'V' %}
+                        Virtual
+                    {% elif pedido.tipoVenda == 'F' %}
+                        Físico
+                    {% else %}
+                        {{ pedido.tipoVenda }}
+                    {% endif %}</td>
                       <td> {{pedido.totalPedido}} </td>
-                      <td> <a href=""> <i class="bi bi-trash text-danger"></i></a> </td>
+                      <td> <a href="{% url 'excluir_pedido' pedido.id %}"> <i class="bi bi-trash text-danger"></i></a> </td>
                     </tr>
                     {% endfor %}
                   </tbody>

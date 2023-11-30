@@ -454,10 +454,12 @@ def editar_loja(request, loja_id):
 def pedido(request):
     clientes = tab_cliente.objects.all()
     dependentes = tab_dependente.objects.all()
-    produtos = tab_produto.objects.all()
+    inventario = tab_inventario.objects.all()
     lojas = tab_loja.objects.all()
-    context = {'produtos':produtos, 'lojas':lojas,  'clientes':clientes, 'dependentes':dependentes}
+    pedidos = tab_pedido.objects.all()
+    context = {'inventario': inventario, 'lojas': lojas, 'clientes': clientes, 'dependentes': dependentes, 'pedidos':pedidos}
     return render(request, 'pedido.html', context)
+
 
 
 from django.db import IntegrityError
@@ -472,11 +474,11 @@ def cadastrar_pedido(request):
             data = request.POST.get('data')
             tipo_venda = request.POST.get('tipoVenda')
             loja_id = request.POST.get('loja')
-            produto_id = request.POST.get('produto')
+            inventario = request.POST.get('inventario')
             preco = request.POST.get('preco')
             quantidade = request.POST.get('qtd')
 
-            print(produto_id)
+            print(inventario)
             # Criando o pedido
             novo_pedido = tab_pedido(
                 data=data,
@@ -485,19 +487,21 @@ def cadastrar_pedido(request):
                 dependente_id=dependente_id,
                 cliente_id=cliente_id,
             )
+
             novo_pedido.save()
+            print(inventario)
 
             # Criando o item do pedido
             novo_item_pedido = tab_item(
                 quantidade=quantidade,
                 subTotal=float(preco) * int(quantidade),
-                produto_id=produto_id,
-                pedido=novo_pedido  # Associando o novo item ao pedido criado acima
+                inventario_id=inventario,
+                pedido=novo_pedido # Associando o novo item ao pedido criado acima
             )
             novo_item_pedido.save()
             messages.success(request, 'Cadastro com sucesso!')
             # Redirecionamento após salvar o pedido
-            return redirect('pedido.html')  # ajuste para a página de pedidos após salvar
+            return redirect('pedido')  # ajuste para a página de pedidos após salvar
 
         except IntegrityError as e:
             print(f"Erro de integridade: {e}")
@@ -508,20 +512,31 @@ def cadastrar_pedido(request):
     clientes = tab_cliente.objects.all()
     dependentes = tab_dependente.objects.all()
     lojas = tab_loja.objects.all()
-    produtos = tab_produto.objects.all()
+    inventario = tab_inventario.objects.all()
 
     context = {
         'clientes': clientes,
         'dependentes': dependentes,
         'lojas': lojas,
-        'produtos': produtos,
+        'inventario': inventario,
     }
     return render(request, 'pedido.html', context)
 
 
-def excluir_pedido(request):
-    produtos = tab_produto.objects.all()
+def excluir_pedido(request, pedido_id):
+    pedido = tab_pedido.objects.get(id=pedido_id)
+    try:
+        pedido.delete()
+        messages.success(request, 'Excluido com sucesso!')
+        return redirect('pedido')  # ajuste para a página de pedidos após salvar
+    except Exception as e:
+        messages.error(request, f'{e}') 
+        
+
+    clientes = tab_cliente.objects.all()
+    dependentes = tab_dependente.objects.all()
+    inventario = tab_inventario.objects.all()
     lojas = tab_loja.objects.all()
-    fornecedores = tab_fornecedor.objects.all()
-    context = {'produtos':produtos, 'lojas':lojas, 'fornecedores':fornecedores}
+    pedidos = tab_pedido.objects.all()
+    context = {'inventario': inventario, 'lojas': lojas, 'clientes': clientes, 'dependentes': dependentes, 'pedidos':pedidos}
     return render(request, 'pedido.html', context)

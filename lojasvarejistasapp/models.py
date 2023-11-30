@@ -69,5 +69,5 @@ class tab_item(models.Model):
     quantidade = models.IntegerField(blank=False, null=False)
     subTotal = models.FloatField(default=0.0, blank=False, null=False)
     # ForeingKey Below
-    produto = models.ForeignKey(tab_inventario, on_delete=models.CASCADE)
+    inventario= models.ForeignKey(tab_inventario, on_delete=models.CASCADE)
     pedido = models.ForeignKey(tab_pedido, on_delete=models.CASCADE)
