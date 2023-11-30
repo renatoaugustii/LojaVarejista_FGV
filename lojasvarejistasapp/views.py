@@ -2,6 +2,8 @@ from django.shortcuts import render, HttpResponse, redirect
 from .models import tab_cliente, tab_dependente, tab_fornecedor, tab_inventario, tab_item, tab_loja, tab_pedido, tab_produto
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from django.http import Http404
+from django.db import IntegrityError
 # Create your views here.
 
 ##############################################
@@ -168,23 +170,132 @@ def produto(request):
     return render(request, 'cad_produto.html', context)
 
 
-
-
 def cadastrar_produto(request):
+
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        descricao = request.POST.get('descricao')
+        tamanho = request.POST.get('tamanho')
+        mEmpacotamento = request.POST.get('mEmpacotamento')
+        codBarras = request.POST.get('codBarras')
+        marca = request.POST.get('marca')
+        fornecedores = request.POST.getlist('fornecedor')
+        qtdProduto = request.POST.get('qtdProduto')
+        estoquePdr = request.POST.get('estoquepdr')
+        preco = request.POST.get('preco')
+        loja = request.POST.get('loja')
+
+        novo_produto = tab_produto(
+            nomeProduto=nome,
+            descricao=descricao,
+            tamanho=tamanho,
+            mEmpacotamento=mEmpacotamento,
+            codBarras=codBarras,
+            marca=marca,
+        )
+
+        try:
+            novo_produto.save()
+
+            for fornecedor_id in fornecedores:
+                fornecedor = get_object_or_404(tab_fornecedor, pk=fornecedor_id)
+                novo_produto.fornecedores.add(fornecedor)
+
+            loja_obj = get_object_or_404(tab_loja, pk=loja)
+
+            produto_inventario = tab_inventario(
+                qtdEstoque=qtdProduto,
+                estoquePadrao=estoquePdr,
+                preco=preco,
+                produto=novo_produto,
+                loja=loja_obj,
+            )
+            produto_inventario.save()
+
+            messages.success(request, 'Produto cadastrado com sucesso!')
+        except Exception as e:
+            messages.error(request, f'Erro ao cadastrar produto: {e}')
+
     produtos = tab_produto.objects.all()
     lojas = tab_loja.objects.all()
     fornecedores = tab_fornecedor.objects.all()
-    context = {'produtos':produtos, 'lojas':lojas, 'fornecedores':fornecedores}
+    context = {'produtos': produtos, 'lojas': lojas, 'fornecedores': fornecedores}
     return render(request, 'cad_produto.html', context)
 
-def editar_produto(request):
-    produtos = tab_produto.objects.all()
+
+def editar_produto(request, produto_id):
+
+    produto = tab_produto.objects.all()
     lojas = tab_loja.objects.all()
     fornecedores = tab_fornecedor.objects.all()
-    context = {'produtos':produtos, 'lojas':lojas, 'fornecedores':fornecedores}
+
+    if produto_id:
+        produto = get_object_or_404(tab_produto, id=produto_id)
+        inventario = get_object_or_404(tab_inventario, produto=produto)
+
+    if request.method == 'POST':
+        try:
+                nome = request.POST.get('nome')
+                descricao = request.POST.get('descricao')
+                tamanho = request.POST.get('tamanho')
+                mEmpacotamento = request.POST.get('mEmpacotamento')
+                codBarras = request.POST.get('codBarras')
+                marca = request.POST.get('marca')
+                fornecedores_novos = request.POST.getlist('fornecedor')
+                qtdProduto = request.POST.get('qtdProduto')
+                estoquePdr = request.POST.get('estoquepdr')
+                preco_str = request.POST.get('preco')
+                # Substituir vírgula por ponto para garantir que seja um número float válido
+                preco = float(preco_str.replace(',', '.'))
+                loja_id = request.POST.get('loja')
+
+                # Atualiza os campos do produto existente
+                produto.nomeProduto = nome
+                produto.descricao = descricao
+                produto.tamanho = tamanho
+                produto.mEmpacotamento = mEmpacotamento
+                produto.codBarras = codBarras
+                produto.marca = marca
+
+                produto.fornecedores.clear()  # Limpa os fornecedores existentes
+                for fornecedor_id in fornecedores_novos:
+                    fornecedor = get_object_or_404(tab_fornecedor, pk=fornecedor_id)
+                    produto.fornecedores.add(fornecedor)
+
+                # Atualiza o inventário do produto existente
+                inventario.qtdEstoque = qtdProduto
+                inventario.estoquePadrao = estoquePdr
+                inventario.preco = preco
+
+                loja_obj = get_object_or_404(tab_loja, pk=loja_id)
+                inventario.loja = loja_obj
+
+                produto.save()
+                inventario.save()
+
+                messages.success(request, 'Produto editado com sucesso!')
+                return redirect('produto')  # Redirecionar para a página correta após a edição
+        except Exception as e:
+            messages.error(request, f'Erro ao salvar produto: {e}')
+
+
+    context = {
+        'produto': produto,
+        'inventario_produto': inventario,
+        'lojas': lojas,
+        'fornecedores': fornecedores,
+    }
+
     return render(request, 'cad_produto.html', context)
+
 
 def excluir_produto(request,produto_id):
+
+    try:
+        produto = get_object_or_404(tab_produto, pk=produto_id)
+    except Http404:
+        return render(request, '404.html')  # Renderiza uma página personalizada de erro 404
+
     produto = tab_produto.objects.get(id=produto_id)
     try:
         produto.delete()
@@ -333,3 +444,84 @@ def editar_loja(request, loja_id):
 
     context = {'lojas': lojas, 'loja': loja}
     return render(request, 'cad_loja.html', context)
+
+
+
+##############################################
+#                  PEDIDO
+##############################################
+
+def pedido(request):
+    clientes = tab_cliente.objects.all()
+    dependentes = tab_dependente.objects.all()
+    produtos = tab_produto.objects.all()
+    lojas = tab_loja.objects.all()
+    context = {'produtos':produtos, 'lojas':lojas,  'clientes':clientes, 'dependentes':dependentes}
+    return render(request, 'pedido.html', context)
+
+
+from django.db import IntegrityError
+
+def cadastrar_pedido(request):
+
+    if request.method == 'POST':
+        try:
+            # Recebendo os dados do formulário
+            cliente_id = request.POST.get('cliente')
+            dependente_id = request.POST.get('dependente')
+            data = request.POST.get('data')
+            tipo_venda = request.POST.get('tipoVenda')
+            loja_id = request.POST.get('loja')
+            produto_id = request.POST.get('produto')
+            preco = request.POST.get('preco')
+            quantidade = request.POST.get('qtd')
+
+            print(produto_id)
+            # Criando o pedido
+            novo_pedido = tab_pedido(
+                data=data,
+                tipoVenda=tipo_venda,
+                totalPedido=float(preco) * int(quantidade), 
+                dependente_id=dependente_id,
+                cliente_id=cliente_id,
+            )
+            novo_pedido.save()
+
+            # Criando o item do pedido
+            novo_item_pedido = tab_item(
+                quantidade=quantidade,
+                subTotal=float(preco) * int(quantidade),
+                produto_id=produto_id,
+                pedido=novo_pedido  # Associando o novo item ao pedido criado acima
+            )
+            novo_item_pedido.save()
+            messages.success(request, 'Cadastro com sucesso!')
+            # Redirecionamento após salvar o pedido
+            return redirect('pedido.html')  # ajuste para a página de pedidos após salvar
+
+        except IntegrityError as e:
+            print(f"Erro de integridade: {e}")
+            messages.success(request, 'Erro Cadastro ')
+            # Faça algo com o erro, como registrar ou lidar com ele adequadamente
+
+    # Se o método não for POST ou houver um erro, renderiza o formulário novamente
+    clientes = tab_cliente.objects.all()
+    dependentes = tab_dependente.objects.all()
+    lojas = tab_loja.objects.all()
+    produtos = tab_produto.objects.all()
+
+    context = {
+        'clientes': clientes,
+        'dependentes': dependentes,
+        'lojas': lojas,
+        'produtos': produtos,
+    }
+    return render(request, 'pedido.html', context)
+
+
+def excluir_pedido(request):
+    produtos = tab_produto.objects.all()
+    lojas = tab_loja.objects.all()
+    fornecedores = tab_fornecedor.objects.all()
+    context = {'produtos':produtos, 'lojas':lojas, 'fornecedores':fornecedores}
+    return render(request, 'pedido.html', context)

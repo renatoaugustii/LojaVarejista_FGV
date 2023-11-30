@@ -38,4 +38,9 @@ urlpatterns = [
     path('excluir_loja/<int:loja_id>',views.excluir_loja, name='excluir_loja'),
     path('editar_loja/<int:loja_id>',views.editar_loja, name='editar_loja'),
 
+# URL PARA VENDA
+    path('pedido/',views.pedido, name='pedido'),
+    path('cadastrar_pedido/',views.cadastrar_pedido, name='cadastrar_pedido'),
+    path('excluir_pedido/<int:pedido_id>',views.excluir_pedido, name='excluir_pedido'),
+
 ]

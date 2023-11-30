@@ -13,192 +13,86 @@
 {%block 'main'%}
           <div class="main">
             <h5 class="mb-4 mt-4 text-secondary">Criar Pedido</h5>
-            <div class="row">
-                <div class="col-md-6 border-end">
-                    <form action="." method="post" class="row g-3">
-                        <div class="col-md-3">
-                          <label for="inputnome" class="form-label"><small>Cliente</small></label>
-                          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
-                        </div>
-        
-                        <div class="col-md-3">
-                          <label for="inputemail" class="form-label"><small>Dependente</small></label>
-                          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
-                        </div>
-        
-                        <div class="col-md-3">
-                          <label for="inputtelefone" class="form-label"><small>Data</small></label>
-                          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
-                        </div>
-        
-                        <div class="col-md-3">
-                          <label for="inputtipopessoa" class="form-label"><small>Tipo Venda</small></label>
-                          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Fisico / Virtual">
+            {% if messages %}
+                  {% for message in messages %}
+                  <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}">
+                          {{ message }}
                       </div>
+                  {% endfor %}
+              {% endif %}
+            <div class="row">
+                <div class="col-md-12 ">
+                    <form method="POST" action="{% url 'cadastrar_pedido' %}" class="row g-3">
+                        {% csrf_token %}
+                        <div class="col-md-3">
+                            <label for="cliente" class="form-label"><small>Cliente</small></label>
+                            <select class="form-select" id="cliente" name="cliente">
+                                <option value="">Selecione o cliente</option>
+                                {% for cliente in clientes %}
+                                    <option value="{{ cliente.id }}">{{ cliente.nomeCliente }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>                        
         
-                   
-                      <h6 class="text-secondary"> Adicione produtos ao pedido #1</h6> <!-- inserir o número do pedido gerado -->
-                      <div class="col-md-2">
-                        <label for="inputtipopessoa" class="form-label"><small>Loja</small></label>
-                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
-                        </div>
-                      <div class="col-md-4">
-                        <label for="inputtipopessoa" class="form-label"><small>Produto</small></label>
-                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
-                        </div>
-                        <div class="col-md-2">
-                            <label for="inputtipopessoa" class="form-label"><small>Preço</small></label>
-                            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
-                            </div>
-                        <div class="col-md-2">
-                            <label for="inputtipopessoa" class="form-label"><small>Quantidade</small></label>
-                            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                        <div class="col-md-3">
+                            <label for="dependente" class="form-label"><small>dependente</small></label>
+                            <select class="form-select" id="dependente" name="dependente">
+                                <option value="">Selecione o dependente</option>
+                                {% for dependente in dependentes %}
+                                    <option value="{{ dependente.id }}">{{ dependente.nomeDependente }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
         
-                        <div class="col-md-2">
-                            <label for="inputtipopessoa" class="form-label"><small>SubTotal</small></label>
-                            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
-                        </div>     
+                        <div class="col-md-3">
+                          <label for="inputtelefone" class="form-label" ><small>Data</small></label>
+                          <input type="date" name='data' class="form-control" required id="exampleFormControlInput1" placeholder="">
+                        </div>
+        
+                        <div class="col-md-3">
+                            <label for="tipoVenda" class="form-label"><small>Tipo Venda</small></label>
+                            <select class="form-select" id="tipoVenda" name="tipoVenda">
+                                <option value="V">Virtual</option>
+                                <option value="F">Físico</option>
+                            </select>
+                        </div>
+        
+                        <div class="col-md-3">
+                            <label for="loja" class="form-label"><small>loja</small></label>
+                            <select class="form-select" id="loja" name="loja">
+                                <option value="">Selecione a loja</option>
+                                {% for loja in lojas %}
+                                    <option value="{{ loja.id }}">{{ loja.nomeLoja }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
+                        <div class="col-md-3">
+                            <label for="produto" class="form-label"><small>Produto</small></label>
+                            <select class="form-select" id="produto" name="produto">
+                                <option value="">Selecione o produto</option>
+                                {% for produto in produtos %}
+                                    <option value="{{ produto.id }}">{{ produto.nomeProduto }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="inputtipopessoa" class="form-label"><small>Preço</small></label>
+                            <input type="text" name='preco' class="form-control" id="exampleFormControlInput1" placeholder="" required>
+                            </div>
+                        <div class="col-md-3">
+                            <label for="inputtipopessoa" class="form-label"><small>Quantidade</small></label>
+                            <input type="text" name='qtd' class="form-control" id="exampleFormControlInput1" placeholder="" required>
+                        </div>
+    
                         <div class="col-md-12 align-items d-flex justify-content-end align-items-end">
-                            <button type="submit" class="btn btn-outline-success ms-2">Adicionar</button>
+                            <a href="{% url 'home' %}" class="btn btn-outline-danger">Sair</a>
+                            <button type="submit" class="btn btn-success ms-2">Salvar</button>
                           </div>
                       </form><!-- End No Labels Form -->
                 </div>
-    
-                <div class="col-md-6 bg-white ">
-                    <div class="card shadow small mt-2 p-0 ms-2 ">
-                        <div class="card-header bg-primary text-white  m-0">
-                            Produtos Adicionados
-                        </div>
-                        <div class="card-body p-2 m-0" style="max-height: 140px; overflow-y: auto; ">
-                            <table class="table table-bordered table-striped m-0 p-0 small">
-                                <thead class="bg-secondary">
-                                    <tr>
-                                        <th scope="col">Item</th>
-                                        <th scope="col">Produto</th>
-                                        <th scope="col">Qtd</th>
-                                        <th scope="col">SubTotal</th>
-                                        <th scope="col">Excluir</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="m-0 p-0">
-                                    <!-- Linhas da tabela com os produtos adicionados -->
-                                    <tr>
-                                        <td>1</td>
-                                        <td>PRO001</td>
-                                        <td>3</td>
-                                        <td>R$ 15,00</td>
-                                        <td>
-                                            <!-- Botões ou ícones para ações (editar/excluir) -->
-                                            .
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>PRO001</td>
-                                        <td>3</td>
-                                        <td>R$ 15,00</td>
-                                        <td>
-                                            <!-- Botões ou ícones para ações (editar/excluir) -->
-                                            .
-                                        </td>
-                                    </tr>
 
-                                    <tr>
-                                        <td>1</td>
-                                        <td>PRO001</td>
-                                        <td>3</td>
-                                        <td>R$ 15,00</td>
-                                        <td>
-                                            <!-- Botões ou ícones para ações (editar/excluir) -->
-                                            .
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>1</td>
-                                        <td>PRO001</td>
-                                        <td>3</td>
-                                        <td>R$ 15,00</td>
-                                        <td>
-                                            <!-- Botões ou ícones para ações (editar/excluir) -->
-                                            .
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>PRO001</td>
-                                        <td>3</td>
-                                        <td>R$ 15,00</td>
-                                        <td>
-                                            <!-- Botões ou ícones para ações (editar/excluir) -->
-                                            .
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>1</td>
-                                        <td>PRO001</td>
-                                        <td>3</td>
-                                        <td>R$ 15,00</td>
-                                        <td>
-                                            <!-- Botões ou ícones para ações (editar/excluir) -->
-                                            .
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>1</td>
-                                        <td>PRO001</td>
-                                        <td>3</td>
-                                        <td>R$ 15,00</td>
-                                        <td>
-                                            <!-- Botões ou ícones para ações (editar/excluir) -->
-                                            .
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>1</td>
-                                        <td>PRO001</td>
-                                        <td>3</td>
-                                        <td>R$ 15,00</td>
-                                        <td>
-                                            <!-- Botões ou ícones para ações (editar/excluir) -->
-                                            .
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-                        </div>
-                      
-                    </div>
-
-                    <hr>
-                    <div class="row p-0 m-0 ">
-                        <div class="col-md-4 align-items d-flex justify-content-end align-items-end">
-                            <table class="table table-bordered table-striped m-0 p-0 shadow small text-center">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Qtd items</th>
-                                        <th scope="col">Valor Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="small">
-                                    <tr>
-                                        <td>5</td>
-                                        <td>R$ 15,00</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-8 align-items d-flex justify-content-end align-items-end mt-3 pt-1">
-                            <button type="submit" class="btn btn-success me-2 mb-2">Finalizar Pedido</button>
-                        </div>  
-                    </div>
-                </div>
             </div>
               <hr class="border-secondary">
               <h5 class="mb-4 mt-4 text-secondary">Pedidos cadastrados</h5>
@@ -206,25 +100,26 @@
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Pedido</th>
                     <th scope="col">Cliente</th>
                     <th scope="col">Loja</th>
                     <th scope="col">Data</th>
+                    <th scope="col">Tipo Venda</th>
                     <th scope="col">Total Pedido</th>
-                    <th scope="col">Editar</th>
                     <th scope="col">Excluir</th>
                   </tr>
                   <tbody>
+                    {% for pedido in pedidos %}  
                     <tr> <!-- Inserir variáveis do Django Aqui -->
-                      <td> 1 </td>
-                      <td> 0000001</td>
-                      <td> Cliente 001</td>
-                      <td> Loja 0002</td>
-                      <td> 10/10/2023</td>
-                      <td> R$ 75,40</td>
-                      <td> <a href=""> <i class="bi bi-pencil text-dark"></i></a> </td>
+
+                      <td> {{pedido.id}} </td>
+                      <td> {{pedido.cliente}} </td>
+                      <td> {{pedido.loja}} </td>
+                      <td> {{pedido.data}} </td>
+                      <td> {{pedido.tipoVenda}} </td>
+                      <td> {{pedido.totalPedido}} </td>
                       <td> <a href=""> <i class="bi bi-trash text-danger"></i></a> </td>
                     </tr>
+                    {% endfor %}
                   </tbody>
                 </thead>
                 <tr>
@@ -233,4 +128,4 @@
 
               </table>
           </div>
-{%endblock 'main'%}
+          {%endblock 'main'%}

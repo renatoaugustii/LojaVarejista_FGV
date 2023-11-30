@@ -2,7 +2,51 @@
 {% load static %}
 
 
+
 {%block 'main'%}
+
+<style>
+    body{
+        background-color: #f2f2f2;
+    }
+
+.card {
+
+        display: flex; /* Ativa o modelo flexbox */
+        justify-content: center; /* Centraliza horizontalmente */
+        align-items: center; /* Centraliza verticalmente */
+        transition: transform 0.2s ease-in-out;
+        border: none;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+.card:hover {
+        transform: scale(1.05);
+    }
+
+
+.card-body{
+text-align: center;
+}
+.card-body p {
+        font-size: 1.5rem;
+font-weight: bold;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+.card a {
+        text-decoration: none; /* Remove o sublinhado dos links */
+        color: inherit; /* Mantém a cor padrão do texto do link */
+    }
+
+.card-body i {
+        font-size: 50px; /* Ajusta o tamanho do ícone */
+        margin-bottom: 10px; /* Adiciona espaçamento abaixo do ícone */
+    }
+
+</style>
+
 
           <div class="main">
         <div class="row">
@@ -60,7 +104,7 @@
             </div>
             <div class="col-4">
                 <div class="card h-100 bg-primary text-white">
-                    <a href="#">
+                    <a href="{% url 'pedido' %}">
                     <div class="card-body ">
                         <p>Vender</p>
                         <i class="bi bi-bag"></i>

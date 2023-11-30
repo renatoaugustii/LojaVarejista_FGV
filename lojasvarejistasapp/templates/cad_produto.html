@@ -25,60 +25,69 @@
                 {% csrf_token %}
                 <div class="col-md-3">
                   <label for="inputnome" class="form-label"><small>Nome Produto</small></label>
-                  <input  name="nome" class="form-control"  placeholder="">
+                  <input name="nome" class="form-control" placeholder="" value="{{ produto.nomeProduto }}">
                 </div>
-
-                <div class="col-md-3">
+                
+                <div class="col-md-2">
                   <label for="inputemail" class="form-label"><small>Descrição</small></label>
-                  <input  name="descricao" class="form-control"  placeholder="">
+                  <input name="descricao" class="form-control" placeholder="" value="{{ produto.descricao }}">
                 </div>
-
-                <div class="col-md-3">
+                
+                <div class="col-md-2">
                   <label for="inputtelefone" class="form-label"><small>Marca</small></label>
-                  <input  name="marca" class="form-control"  placeholder="">
+                  <input name="marca" class="form-control" placeholder="" value="{{ produto.marca }}">
                 </div>
-
-                <div class="col-md-3">
+                
+                <div class="col-md-2">
                   <label for="inputtipopessoa" class="form-label"><small>Código Barras</small></label>
-                  <input  name="codBarras" class="form-control"  placeholder="Somente números">
-              </div>
-              <div class="col-md-2">
-                <label for="inputtipopessoa" class="form-label"><small>Tamanho</small></label>
-                <input  name="tamanho" class="form-control"  placeholder="">
+                  <input name="codBarras" class="form-control" placeholder="Somente números" value="{{ produto.codBarras }}">
                 </div>
+                
+                <div class="col-md-3">
+                  <label for="inputtipopessoa" class="form-label"><small>Quantidade Produto</small></label>
+                  <input type="number" name="qtdProduto" class="form-control" placeholder="" value="{{ inventario_produto.qtdEstoque }}">
+                </div>
+                
                 <div class="col-md-2">
-                    <label for="inputtipopessoa" class="form-label"><small>Empacotamento</small></label>
-                    <input  name="mEmpacotamento" class="form-control"  placeholder="">
+                  <label for="inputtipopessoa" class="form-label"><small>Tamanho</small></label>
+                  <input name="tamanho" class="form-control" placeholder="" value="{{ produto.tamanho }}">
                 </div>
-
+                
                 <div class="col-md-2">
-                    <label for="inputtipopessoa" class="form-label"><small>Estoque Padrão</small></label>
-                    <input  name="estoquepdr" class="form-control"  placeholder="">
+                  <label for="inputtipopessoa" class="form-label"><small>Empacotamento</small></label>
+                  <input name="mEmpacotamento" class="form-control" placeholder="" value="{{ produto.mEmpacotamento }}">
                 </div>
+                
+                <div class="col-md-2">
+                  <label for="inputtipopessoa" class="form-label"><small>Estoque Padrão</small></label>
+                  <input name="estoquepdr" class="form-control" placeholder="" value="{{ inventario_produto.estoquePadrao}}">
+                </div>
+                
                 <div class="col-md-2">
                   <label for="inputtipopessoa" class="form-label"><small>Preço</small></label>
-                  <input  name="preco" class="form-control"  placeholder="">
-                  </div>
-
+                  <input name="preco" class="form-control" placeholder="" value="{{ inventario_produto.preco }}">
+                </div>
+                
                 <div class="col-md-2">
-                  <label for="loja" class="form-label"><small>loja</small></label>
+                  <label for="loja" class="form-label"><small>Loja</small></label>
                   <select name="loja" id="loja" class="form-select">
-                      <option value="">Selecione o loja</option>
-                      {% for loja in lojas %}
-                          <option value="{{ loja.id }}">{{ loja.nomeLoja }}</option>
-                      {% endfor %}
+                    <option value="">Selecione o loja</option>
+                    {% for loja in lojas %}
+                      <option value="{{ loja.id }}" {% if inventario_produto and loja.id == inventario_produto.loja.id %} selected {% endif %}>{{ loja.nomeLoja }}</option>
+                    {% endfor %}
                   </select>
                 </div>
-
+                
                 <div class="col-md-2">
-                  <label for="fornecedor" class="form-label"><small>fornecedor</small></label>
+                  <label for="fornecedor" class="form-label"><small>Fornecedor</small></label>
                   <select name="fornecedor" id="fornecedor" class="form-select">
-                      <option value="">Selecione o fornecedor</option>
-                      {% for fornecedor in fornecedores %}
-                          <option value="{{ fornecedor.id }}">{{ fornecedor.nomeFornecedor }}</option>
-                      {% endfor %}
+                    <option value="">Selecione o fornecedor</option>
+                    {% for fornecedor in fornecedores %}
+                      <option value="{{ fornecedor.id }}" {% for fornecedor_produto in produto.fornecedores.all %} {% if fornecedor_produto.id == fornecedor.id %} selected {% endif %} {% endfor %}>{{ fornecedor.nomeFornecedor }}</option>
+                    {% endfor %}
                   </select>
                 </div>
+                
 
                 <div class="col-md-12 align-items d-flex justify-content-end align-items-end">
                   <a href="{% url 'home' %}" class="btn btn-outline-danger">Sair</a>
@@ -110,31 +119,34 @@
                     <th scope="col">Editar</th>
                     <th scope="col">Excluir</th>
                   </tr>
-                  <tbody>
-                    <tr> <!-- Inserir variáveis do Django Aqui -->
-                      {% for produto in produtos %}
-                        <td> {{produto.id}} </td>
-                        <td> {{produto.produto}}</td>
-                        <td> {{produto.descricao}}</td>
-                        <td> {{produto.marca}}</td>
-                        <td> {{produto.codBarras}} </td>
-                        <td> {{produto.tamanho}} </td>
-                        <td> {{produto.mEmpacotamento}} </td>
-                        <td> {{produto.fornecedores}}</td>
-                        <td> {{produto.loja}}</td>
-                        <td> {{produto.estoquePadrao}}</td>
-                        <td> {{produto.qtdEstoque}}</td>
-                        <td> {{produto.preco}}</td>
-                        <td> <a href="{% url 'editar_produto' produto.id %}">  <i class="bi bi-pencil text-dark"></i></a> </td>
-                        <td> <a href="{% url 'excluir_produto' produto.id %}"> <i class="bi bi-trash text-danger"></i></a> </td>
-                      {% endfor %}
-                    </tr>
-                  </tbody>
                 </thead>
-                <tr>
-
-                </tr>
-
+                <tbody>
+                  <!-- Inserir variáveis do Django Aqui -->
+                  {% for produto in produtos %}
+                    <tr>
+                      <td>{{ produto.id }}</td>
+                      <td>{{ produto.nomeProduto }}</td>
+                      <td>{{ produto.descricao }}</td>
+                      <td>{{ produto.marca }}</td>
+                      <td>{{ produto.codBarras }}</td>
+                      <td>{{ produto.tamanho }}</td>
+                      <td>{{ produto.mEmpacotamento }}</td>
+                      <td>
+                        {% for fornecedor in produto.fornecedores.all %}
+                          {{ fornecedor.nomeFornecedor }}
+                          {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                      </td>
+                      <td>{{ produto.tab_inventario_set.all.0.loja.nomeLoja }}</td>
+                      <td>{{ produto.tab_inventario_set.all.0.estoquePadrao }}</td>
+                      <td>{{ produto.tab_inventario_set.all.0.qtdEstoque }}</td>
+                      <td>{{ produto.tab_inventario_set.all.0.preco }}</td>
+                      <td><a href="{% url 'editar_produto' produto.id %}"><i class="bi bi-pencil text-dark"></i></a></td>
+                      <td><a href="{% url 'excluir_produto' produto.id %}"><i class="bi bi-trash text-danger"></i></a></td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
               </table>
+              
           </div>
 {%endblock 'main'%}
